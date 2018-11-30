@@ -47,17 +47,18 @@
     <body>
         <form class="form-control">
             <!-- cria o DAO -->
-            <jsp:useBean id="dao" class="br.com.caelum.jdbc.dao.ContatoDao"/>
+            
             <table id="customers">
                 <tr>
                     <th>Nome</th>
                     <th>Email</th>
                     <th>Endereço</th>
                     <th>Data nascimento</th>
+                    <th>Remover</th>
                 </tr>
                 <!-- percorre contatos montando as linhas da tabela	-->
                 <% int contador = 0; %>
-                <c:forEach var="contato" items="${dao.lista}" varStatus="row">
+                <c:forEach var="contato" items="${contatos}">
                     <tr>
                         <td>${contato.nome}</td>
 
@@ -71,14 +72,12 @@
                         </td>
 
                         <td>${contato.endereco}</td>
-                        <%
-                            String dataForm = new SimpleDateFormat("dd/MM/yyyy").format(dao.getLista().get(contador).getDataNascimento().getTime());
-                            contador++;
-                        %>
                         
-                        <%--<fmt:formatDate value="${contato.dataNascimento.time}" pattern="dd/MM/yyyy"/> --%>
+                        <td><fmt:formatDate value="${contato.dataNascimento.time}" pattern="dd/MM/yyyy"/></td>
                         
-                        <td><%= dataForm%></td>
+                        <td>
+                            <a href="mvc?logica=RemoveContatoLogic&id=${contato.id}">Remover</a>
+                        </td>
                     </tr>
                 </c:forEach>
             </table>
@@ -86,3 +85,10 @@
         <div align="center">contador = <%= contador%></div>
     </body>
 </html>
+
+<%-- <jsp:useBean id="dao" class="br.com.caelum.jdbc.dao.ContatoDao"/>
+     <%String dataForm = new SimpleDateFormat("dd/MM/yyyy").format(dao.getLista().get(contador).getDataNascimento().getTime());
+         contador++;
+     %>
+     <td><%= dataForm%></td>
+--%>

@@ -19,6 +19,10 @@ public class ContatoDao {
         this.connection = new ConnectionFactory().getConnection();
     }
 
+    public ContatoDao(Connection connection) {
+        this.connection = connection;
+    }
+    
     public void adiciona(Contato contato) {
         StringBuilder sql = new StringBuilder();
         sql.append("insert into contatos (nome,email,endereco,data_nascimento) values (?,?,?,?) ");
@@ -28,6 +32,7 @@ public class ContatoDao {
             stmt.setString(3, contato.getEndereco());
             stmt.setDate(4, new Date(contato.getDataNascimento().getTimeInMillis()));
             stmt.execute();
+            stmt.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -63,22 +68,19 @@ public class ContatoDao {
     public List<Contato> getLista() {
         try {
             List<Contato> contatos = new ArrayList<>();
-            PreparedStatement stmt = this.connection.prepareStatement("select * from contatos");
-            ResultSet rs = stmt.executeQuery();
-
-            while (rs.next()) {
-                Contato contato = new Contato();
-                contato.setId(rs.getLong("id"));
-                contato.setNome(rs.getString("nome"));
-                contato.setEmail(rs.getString("email"));
-                contato.setEndereco(rs.getString("endereco"));
-                Calendar data = Calendar.getInstance();
-                data.setTime(rs.getDate("data_nascimento"));
-                contato.setDataNascimento(data);
-                contatos.add(contato);
+            try (PreparedStatement stmt = this.connection.prepareStatement("select * from contatos"); ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Contato contato = new Contato();
+                    contato.setId(rs.getLong("id"));
+                    contato.setNome(rs.getString("nome"));
+                    contato.setEmail(rs.getString("email"));
+                    contato.setEndereco(rs.getString("endereco"));
+                    Calendar data = Calendar.getInstance();
+                    data.setTime(rs.getDate("data_nascimento"));
+                    contato.setDataNascimento(data);
+                    contatos.add(contato);
+                }
             }
-            rs.close();
-            stmt.close();
             return contatos;
         } catch (SQLException e) {
             throw new RuntimeException(e);
