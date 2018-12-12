@@ -17,7 +17,7 @@ public class FiltroTempoDeExecucao implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         this.filterConfig = filterConfig;
-        Filter.super.init(filterConfig);
+        
     }
 
     @Override
@@ -37,7 +37,7 @@ public class FiltroTempoDeExecucao implements Filter {
 
     @Override
     public void destroy() {
-        Filter.super.destroy();
+        
     }
 
 }

@@ -56,6 +56,9 @@
                     </div>
                     <div class="form-group col-md-12">
                         <input type="submit" value="Gravar" class="btn btn-dark"/>
+			<a href="mvc?logica=ListaContatosLogic">
+			    <input type="button" value="Listar" class="btn btn-warning"/>
+			</a>
                     </div>
                 </div>
 
